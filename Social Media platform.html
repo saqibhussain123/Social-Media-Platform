@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnectHub - Social Media Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 20px;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+        /* Heart animation */
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .heart-beat {
+            animation: heartBeat 0.8s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-200">
+    <!-- Top Navigation Bar -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700 sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center" id="home-link">
+                        <span class="text-xl font-bold text-primary">ConnectHub</span>
+                    </a>
+                </div>
+
+                <!-- Search Bar (Medium screens and up) -->
+                <div class="hidden md:block flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" placeholder="Search..." class="w-full pl-10 pr-4 py-2 border dark:border-gray-600 rounded-full bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary text-base">
+                    </div>
+                </div>
+
+                <!-- Navigation Icons -->
+                <div class="flex items-center space-x-4">
+                    <!-- Home -->
+                    <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors p-2" id="nav-home">
+                        <i class="fas fa-home text-xl"></i>
+                    </a>
+                    
+                    <!-- Messages -->
+                    <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors p-2" id="nav-messages">
+                        <i class="fas fa-comment text-xl"></i>
+                    </a>
+                    
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors p-2" id="notifications-toggle">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                        
+                        <!-- Notifications Dropdown -->
+                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 fade-in z-20">
+                            <div class="p-4 border-b dark:border-gray-700">
+                                <h3 class="font-bold">Notifications</h3>
+                            </div>
+                            <div class="max-h-96 overflow-y-auto custom-scrollbar">
+                                <a href="#" class="block p-4 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-start">
+                                        <img src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M24 12 A12 12 0 0 0 24 36 A12 12 0 0 0 24 12 Z'/%3E%3C/svg%3E" alt="Avatar" class="w-10 h-10 rounded-full mr-4">
+                                        <div>
+                                            <p><span class="font-semibold">Alex Johnson</span> liked your post</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">2 minutes ago</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="#" class="block p-4 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-start">
+                                        <img src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M32 20 A8 8 0 0 0 16 20 A8 8 0 0 0 32 20 Z M12 32 L36 32 C36 32 34 22 24 22 C14 22 12 32 12 32 Z'/%3E%3C/svg%3E" alt="Avatar" class="w-10 h-10 rounded-full mr-4">
+                                        <div>
+                                            <p><span class="font-semibold">Taylor Wilson</span> started following you</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">1 hour ago</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="#" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-start">
+                                        <img src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M18 22 A6 6 0 0 0 30 22 A6 6 0 0 0 18 22 Z M36 36 L12 36 C12 30 18 26 24 26 C30 26 36 30 36 36 Z'/%3E%3C/svg%3E" alt="Avatar" class="w-10 h-10 rounded-full mr-4">
+                                        <div>
+                                            <p><span class="font-semibold">Jamie Smith</span> commented on your post</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">3 hours ago</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Create Post -->
+                    <button class="bg-primary text-white rounded-full p-2 hover:bg-opacity-90 transition-colors" id="create-post-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    
+                    <!-- User Menu -->
+                    <div class="relative">
+                        <button class="flex items-center focus:outline-none" id="user-menu-toggle">
+                            <img id="nav-user-avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M24 12 A8 8 0 0 0 24 28 A8 8 0 0 0 24 12 Z M12 36 L36 36 C36 30 30 26 24 26 C18 26 12 30 12 36 Z'/%3E%3C/svg%3E" alt="User" class="w-8 h-8 rounded-full">
+                        </button>
+                        
+                        <!-- User Menu Dropdown -->
+                        <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 fade-in z-20">
+                            <a href="#" class="block px-4 py-2 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" id="profile-link">
+                                <div class="flex items-center">
+                                    <i class="fas fa-user mr-3 text-gray-500 dark:text-gray-400"></i>
+                                    <span>Profile</span>
+                                </div>
+                            </a>
+                            <a href="#" class="block px-4 py-2 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center">
+                                    <i class="fas fa-cog mr-3 text-gray-500 dark:text-gray-400"></i>
+                                    <span>Settings</span>
+                                </div>
+                            </a>
+                            <button id="theme-toggle" class="w-full text-left px-4 py-2 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center">
+                                    <i id="theme-icon" class="fas fa-moon mr-3 text-gray-500 dark:text-gray-400"></i>
+                                    <span id="theme-text">Dark Mode</span>
+                                </div>
+                            </button>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <div class="flex items-center">
+                                    <i class="fas fa-sign-out-alt mr-3 text-gray-500 dark:text-gray-400"></i>
+                                    <span>Logout</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Bar (Mobile) -->
+            <div class="md:hidden py-2">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" placeholder="Search..." class="w-full pl-10 pr-4 py-2 border dark:border-gray-600 rounded-full bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary text-base">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Sidebar (Desktop) -->
+        <aside class="hidden lg:block">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-4 sticky top-24">
+                <!-- Current User Profile -->
+                <div class="flex items-center mb-6" id="sidebar-user-profile">
+                    <img id="sidebar-user-avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M24 12 A8 8 0 0 0 24 28 A8 8 0 0 0 24 12 Z M12 36 L36 36 C36 30 30 26 24 26 C18 26 12 30 12 36 Z'/%3E%3C/svg%3E" alt="User" class="w-12 h-12 rounded-full mr-3">
+                    <div>
+                        <h3 class="font-bold" id="sidebar-user-name">Chris Morgan</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400" id="sidebar-user-handle">@chrismorgan</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <nav class="space-y-2">
+                    <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-home w-6 text-primary"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-compass w-6 text-gray-500 dark:text-gray-400"></i>
+                        <span>Explore</span>
+                    </a>
+                    <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-bell w-6 text-gray-500 dark:text-gray-400"></i>
+                        <span>Notifications</span>
+                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </a>
+                    <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-comment w-6 text-gray-500 dark:text-gray-400"></i>
+                        <span>Messages</span>
+                    </a>
+                    <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-bookmark w-6 text-gray-500 dark:text-gray-400"></i>
+                        <span>Bookmarks</span>
+                    </a>
+                    <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-user w-6 text-gray-500 dark:text-gray-400"></i>
+                        <span>Profile</span>
+                    </a>
+                </nav>
+                
+                <!-- Create Post Button -->
+                <button class="mt-6 w-full bg-primary text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
+                    Create Post
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Feed Area -->
+        <div class="lg:col-span-2" id="main-content">
+            <!-- Content will be loaded dynamically here -->
+        </div>
+    </main>
+
+    <!-- Create Post Modal -->
+    <div id="create-post-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30 hidden fade-in">
+        <div class="bg-white dark:bg-gray-800 rounded-lg max-w-lg w-full mx-4 slide-up">
+            <div class="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+                <h3 class="font-bold text-lg">Create Post</h3>
+                <button id="close-post-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4">
+                <div class="flex items-start mb-4">
+                    <img id="post-modal-avatar" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M24 12 A8 8 0 0 0 24 28 A8 8 0 0 0 24 12 Z M12 36 L36 36 C36 30 30 26 24 26 C18 26 12 30 12 36 Z'/%3E%3C/svg%3E" alt="User" class="w-10 h-10 rounded-full mr-3">
+                    <textarea id="post-content" placeholder="What's on your mind?" class="w-full p-3 border dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary text-base" rows="4"></textarea>
+                </div>
+                <div id="post-preview" class="hidden mb-4">
+                    <div class="relative">
+                        <img id="post-image-preview" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg">
+                        <button id="remove-image" class="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex space-x-2">
+                        <button class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors p-2" id="add-image">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors p-2">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors p-2">
+                            <i class="fas fa-smile"></i>
+                        </button>
+                    </div>
+                    <button id="submit-post" class="bg-primary text-white py-2 px-6 rounded-full hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Input for Post Creation (hidden) -->
+    <input type="file" id="image-input" accept="image/*" class="hidden">
+
+    <script>
+        // Mock Database
+        const mockUsers = [
+            {
+                id: 1,
+                name: "Chris Morgan",
+                handle: "chrismorgan",
+                avatar: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M24 12 A8 8 0 0 0 24 28 A8 8 0 0 0 24 12 Z M12 36 L36 36 C36 30 30 26 24 26 C18 26 12 30 12 36 Z'/%3E%3C/svg%3E",
+                bio: "Digital creator | Photography enthusiast | Coffee addict",
+                followers: 582,
+                following: 241,
+                isCurrentUser: true
+            },
+            {
+                id: 2,
+                name: "Alex Johnson",
+                handle: "alexj",
+                avatar: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M24 12 A12 12 0 0 0 24 36 A12 12 0 0 0 24 12 Z'/%3E%3C/svg%3E",
+                bio: "Travel blogger | Always on the go | 30+ countries",
+                followers: 1245,
+                following: 379,
+                isFollowing: true
+            },
+            {
+                id: 3,
+                name: "Taylor Wilson",
+                handle: "taywilson",
+                avatar: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M32 20 A8 8 0 0 0 16 20 A8 8 0 0 0 32 20 Z M12 32 L36 32 C36 32 34 22 24 22 C14 22 12 32 12 32 Z'/%3E%3C/svg%3E",
+                bio: "Software developer | Open source contributor | Cat lover",
+                followers: 872,
+                following: 156,
+                isFollowing: false
+            },
+            {
+                id: 4,
+                name: "Jamie Smith",
+                handle: "jamiesmith",
+                avatar: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Ccircle fill='%235D5CDE' cx='24' cy='24' r='24'/%3E%3Cpath fill='%23FFFFFF' d='M18 22 A6 6 0 0 0 30 22 A6 6 0 0 0 18 22 Z M36 36 L12 36 C12 30 18 26 24 26 C30 26 36 30 36 36 Z'/%3E%3C/svg%3E",
+                bio: "Fitness coach | Healthy lifestyle advocate | Marathon runner",
+                followers: 2351,
+                following: 412,
+                isFollowing: true
+            }
+        ];
+
+        const mockPosts = [
+            {
+                id: 1,
+                userId: 2,
+                content: "Just arrived in Barcelona for the tech conference! The architecture here is absolutely stunning. Can't wait to explore more of the city after the sessions. #TechConf2023 #Barcelona",
+                image: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect fill='%235D5CDE' width='600' height='400'/%3E%3Cpath fill='%23FFFFFF' d='M150 350 L300 100 L450 350 Z'/%3E%3Ccircle fill='%23FFFFFF' cx='450' cy='150' r='50'/%3E%3Cpath fill='%23FFFFFF' d='M100 150 L150 150 L150 350 L100 350 Z M175 200 L225 200 L225 350 L175 350 Z'/%3E%3C/svg%3E",
+                timestamp: "2 hours ago",
+                likes: 87,
+                isLiked: false,
+                comments: [
+                    {
+                        id: 1,
+                        userId: 3,
+                        content: "Barcelona is amazing! You should definitely check out Sagrada Familia if you have time.",
+                        timestamp: "1 hour ago"
+                    },
+                    {
+                        id: 2,
+                        userId: 1,
+                        content: "Have a great time at the conference! Looking forward to hearing about it when you get back.",
+                        timestamp: "45 minutes ago"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                userId: 4,
+                content: "Completed my first half marathon today! 13.1 miles in 1:45! All those early morning training sessions finally paid off. So proud of this achievement! #Running #Fitness #HalfMarathon",
+                image: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect fill='%235D5CDE' width='600' height='400'/%3E%3Cpath fill='%23FFFFFF' d='M150 200 C150 200 150 300 300 300 C450 300 450 200 450 200 C450 200 450 100 300 100 C150 100 150 200 150 200 Z'/%3E%3Ccircle fill='%235D5CDE' cx='300' cy='200' r='50'/%3E%3C/svg%3E",
+                timestamp: "5 hours ago",
+                likes: 213,
+                isLiked: true,
+                comments: [
+                    {
+                        id: 3,
+                        userId: 2,
+                        content: "Congratulations! That's an amazing time for a first half marathon!",
+                        timestamp: "4 hours ago"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                userId: 1,
+                content: "Just upgraded my home office setup with a new ultrawide monitor. Productivity levels about to go through the roof! #HomeOffice #TechSetup #WFH",
+                image: "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect fill='%235D5CDE' width='600' height='400'/%3E%3Crect fill='%23333333' x='100' y='100' width='400' height='200' rx='10' ry='10'/%3E%3Crect fill='%23FFFFFF' x='120' y='120' width='360' height='160' rx='5' ry='5'/%3E%3Crect fill='%23333333' x='250' y='300' width='100' height='20'/%3E%3Crect fill='%23333333' x='200' y='320' width='200' height='10'/%3E%3C/svg%3E",
+                timestamp: "1 day ago",
+                likes: 142,
+                isLiked: false,
+                comments: [
+                    {
+                        id: 4,
+                        userId: 3,
+                        content: "Nice setup! Which monitor did you get?",
+                        timestamp: "20 hours ago"
+                    },
+                    {
+                        id: 5,
+                        userId: 1,
+                        content: "Got the Samsung Odyssey G9. It's basically like having two 27-inch monitors without the bezel in the middle!",
+                        timestamp: "19 hours ago"
+                    },
+                    {
+                        id: 6,
+                        userId: 3,
+                        content: "That's awesome! I've been thinking about getting that one too.",
+                        timestamp: "18 hours ago"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                userId: 3,
+                content: "Just released a new open-source library for JavaScript animations! Check it out on GitHub if you're interested. Link in comments. #JavaScript #OpenSource #WebDev",
+                image: null,
+                timestamp: "2 days ago",
+                likes: 95,
+                isLiked: true,
+                comments: [
+                    {
+                        id: 7,
+                        userId: 3,
+                        content: "Here's the link: github.com/taywilson/animate-js",
+                        timestamp: "2 days ago"
+                    },
+                    {
+                        id: 8,
+                        userId: 2,
+                        content: "This looks really useful! Can't wait to try it out in my next project.",
+                        timestamp: "1 day ago"
+                    }
+                ]
+            }
+        ];
+
+        // Current User ID
+        const currentUserId = 1;
+
+        // DOM Elements
+        const mainContent = document.getElementById('main-content');
+        const notificationsToggle = document.getElementById('notifications-toggle');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        const userMenuToggle = document.getElementById('user-menu-toggle');
+        const userMenuDropdown = document.getElementById('user-menu-dropdown');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+        const createPostBtn = document.getElementById('create-post-btn');
+        const createPostModal = document.getElementById('create-post-modal');
+        const closePostModal = document.getElementById('close-post-modal');
+        const postContent = document.getElementById('post-content');
+        const submitPost = document.getElementById('submit-post');
+        const homeLink = document.getElementById('home-link');
+        const navHome = document.getElementById('nav-home');
+        const profileLink = document.getElementById('profile-link');
+        const addImage = document.getElementById('add-image');
+        const imageInput = document.getElementById('image-input');
+        const postPreview = document.getElementById('post-preview');
+        const postImagePreview = document.getElementById('post-image-preview');
+        const removeImage = document.getElementById('remove-image');
+
+        // Initialize theme
+        function initTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Light Mode';
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    themeText.textContent = 'Light Mode';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    themeIcon.classList.add('fa-moon');
+                    themeIcon.classList.remove('fa-sun');
+                    themeText.textContent = 'Dark Mode';
+                }
+            });
+        }
+
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            
+            if (document.documentElement.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('fa-sun');
+                themeText.textContent = 'Dark Mode';
+            }
+            
+            userMenuDropdown.classList.add('hidden');
+        });
+
+        // Toggle notifications dropdown
+        notificationsToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notificationsDropdown.classList.toggle('hidden');
+            userMenuDropdown.classList.add('hidden');
+        });
+
+        // Toggle user menu dropdown
+        userMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userMenuDropdown.classList.toggle('hidden');
+            notificationsDropdown.classList.add('hidden');
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!notificationsToggle.contains(e.target) && !notificationsDropdown.contains(e.target)) {
+                notificationsDropdown.classList.add('hidden');
+            }
+            
+            if (!userMenuToggle.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                userMenuDropdown.classList.add('hidden');
+            }
+        });
+
+        // Open create post modal
+        createPostBtn.addEventListener('click', () => {
+            createPostModal.classList.remove('hidden');
+            postContent.value = '';
+            postPreview.classList.add('hidden');
+            submitPost.disabled = true;
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Close create post modal
+        closePostModal.addEventListener('click', () => {
+            createPostModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        // Close modal when clicking outside
+        createPostModal.addEventListener('click', (e) => {
+            if (e.target === createPostModal) {
+                createPostModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Enable/disable submit button based on content
+        postContent.addEventListener('input', () => {
+            submitPost.disabled = postContent.value.trim() === '' && postPreview.classList.contains('hidden');
+        });
+
+        // Add image to post
+        addImage.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        // Handle image selection
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    postImagePreview.src = event.target.result;
+                    postPreview.classList.remove('hidden');
+                    submitPost.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remove image from post
+        removeImage.addEventListener('click', () => {
+            postPreview.classList.add('hidden');
+            postImagePreview.src = '';
+            imageInput.value = '';
+            submitPost.disabled = postContent.value.trim() === '';
+        });
+
+        // Submit new post
+        submitPost.addEventListener('click', () => {
+            const content = postContent.value.trim();
+            if (content || !postPreview.classList.contains('hidden')) {
+                const newPost = {
+                    id: mockPosts.length + 1,
+                    userId: currentUserId,
+                    content: content,
+                    image: postPreview.classList.contains('hidden') ? null : postImagePreview.src,
+                    timestamp: "Just now",
+                    likes: 0,
+                    isLiked: false,
+                    comments: []
+                };
+                
+                mockPosts.unshift(newPost);
+                createPostModal.classList.add('hidden');
+                document.body.style.overflow = '';
+                
+                if (mainContent.querySelector('#feed-container')) {
+                    renderFeed();
+                }
+            }
+        });
+
+        // Helper function to find user by ID
+        function getUserById(id) {
+            return mockUsers.find(user => user.id === id);
+        }
+
+        // Generate HTML for a post
+        function generatePostHTML(post) {
+            const user = getUserById(post.userId);
+            const isCurrentUserPost = post.userId === currentUserId;
+            
+            const commentsHTML = post.comments.map(comment => {
+                const commentUser = getUserById(comment.userId);
+                return `
+                    <div class="border-t dark:border-gray-700 pt-3 mt-3">
+                        <div class="flex">
+                            <img src="${commentUser.avatar}" alt="${commentUser.name}" class="w-8 h-8 rounded-full mr-2">
+                            <div>
+                                <div class="flex items-center">
+                                    <span class="font-semibold">${commentUser.name}</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">${comment.timestamp}</span>
+                                </div>
+                                <p class="text-sm">${comment.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            return `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 mb-4">
+                    <!-- Post Header -->
+                    <div class="p-4 flex justify-between">
+                        <div class="flex items-center">
+                            <img src="${user.avatar}" alt="${user.name}" class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <div class="flex items-center">
+                                    <h4 class="font-bold">${user.name}</h4>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">@${user.handle}</span>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">${post.timestamp}</p>
+                            </div>
+                        </div>
+                        ${!isCurrentUserPost ? `
+                            <button class="follow-btn text-sm font-semibold ${user.isFollowing ? 'text-gray-500 dark:text-gray-400' : 'text-primary'}" data-user-id="${user.id}">
+                                ${user.isFollowing ? 'Following' : 'Follow'}
+                            </button>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Post Content -->
+                    <div class="px-4 pb-2">
+                        <p class="mb-3">${post.content}</p>
+                        ${post.image ? `<img src="${post.image}" alt="Post image" class="w-full h-auto rounded-lg mb-3">` : ''}
+                    </div>
+                    
+                    <!-- Post Actions -->
+                    <div class="px-4 py-2 border-t dark:border-gray-700 flex space-x-6">
+                        <button class="like-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors ${post.isLiked ? 'text-red-500 dark:text-red-500 hover:text-red-600 dark:hover:text-red-600' : ''}" data-post-id="${post.id}">
+                            <i class="fas ${post.isLiked ? 'fa-heart' : 'fa-heart'} mr-1"></i>
+                            <span class="like-count">${post.likes}</span>
+                        </button>
+                        <button class="comment-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" data-post-id="${post.id}">
+                            <i class="fas fa-comment mr-1"></i>
+                            <span>${post.comments.length}</span>
+                        </button>
+                        <button class="share-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
+                            <i class="fas fa-share mr-1"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="px-4 py-2 border-t dark:border-gray-700">
+                        <div class="mb-3">
+                            ${commentsHTML}
+                        </div>
+                        <div class="flex items-center">
+                            <img src="${getUserById(currentUserId).avatar}" alt="Your profile" class="w-8 h-8 rounded-full mr-2">
+                            <div class="flex-1 relative">
+                                <input type="text" placeholder="Add a comment..." class="w-full py-2 px-3 bg-gray-100 dark:bg-gray-700 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-primary comment-input" data-post-id="${post.id}">
+                                <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render the main feed
+        function renderFeed() {
+            mainContent.innerHTML = `
+                <div id="feed-container">
+                    <h2 class="text-xl font-bold mb-4">Home</h2>
+                    <div id="posts-container">
+                        ${mockPosts.map(post => generatePostHTML(post)).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for post interactions
+            attachPostEventListeners();
+        }
+
+        // Render a user profile
+        function renderProfile(userId) {
+            const user = getUserById(userId);
+            const userPosts = mockPosts.filter(post => post.userId === userId);
+            const isCurrentUser = userId === currentUserId;
+            
+            mainContent.innerHTML = `
+                <div id="profile-container">
+                    <!-- Profile Header -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 mb-4">
+                        <!-- Cover Photo -->
+                        <div class="h-32 bg-gradient-to-r from-primary to-blue-500 rounded-t-lg"></div>
+                        
+                        <!-- Profile Info -->
+                        <div class="px-4 pb-4 relative">
+                            <div class="flex flex-col sm:flex-row sm:items-end -mt-16 sm:-mt-12 mb-4">
+                                <img src="${user.avatar}" alt="${user.name}" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white dark:border-gray-800 mr-4">
+                                <div class="mt-4 sm:mt-0 flex-1">
+                                    <h1 class="text-xl sm:text-2xl font-bold">${user.name}</h1>
+                                    <p class="text-gray-500 dark:text-gray-400">@${user.handle}</p>
+                                </div>
+                                ${isCurrentUser ? `
+                                    <button class="mt-4 sm:mt-0 bg-primary text-white px-4 py-2 rounded-full hover:bg-opacity-90 transition-colors">
+                                        Edit Profile
+                                    </button>
+                                ` : `
+                                    <button class="mt-4 sm:mt-0 ${user.isFollowing ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600' : 'bg-primary text-white'} px-4 py-2 rounded-full hover:bg-opacity-90 transition-colors follow-profile-btn" data-user-id="${user.id}">
+                                        ${user.isFollowing ? 'Following' : 'Follow'}
+                                    </button>
+                                `}
+                            </div>
+                            
+                            <p class="mb-4">${user.bio}</p>
+                            
+                            <div class="flex space-x-4">
+                                <div>
+                                    <span class="font-bold">${userPosts.length}</span>
+                                    <span class="text-gray-500 dark:text-gray-400">Posts</span>
+                                </div>
+                                <div>
+                                    <span class="font-bold">${user.followers}</span>
+                                    <span class="text-gray-500 dark:text-gray-400">Followers</span>
+                                </div>
+                                <div>
+                                    <span class="font-bold">${user.following}</span>
+                                    <span class="text-gray-500 dark:text-gray-400">Following</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Posts -->
+                    <div>
+                        <h2 class="text-xl font-bold mb-4">Posts</h2>
+                        ${userPosts.length > 0 ? 
+                            userPosts.map(post => generatePostHTML(post)).join('') : 
+                            `<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 p-6 text-center">
+                                <p class="text-gray-500 dark:text-gray-400">No posts yet</p>
+                            </div>`
+                        }
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for post interactions
+            attachPostEventListeners();
+            
+            // Add event listener for profile follow button
+            const followProfileBtn = mainContent.querySelector('.follow-profile-btn');
+            if (followProfileBtn) {
+                followProfileBtn.addEventListener('click', () => {
+                    const userId = parseInt(followProfileBtn.getAttribute('data-user-id'));
+                    const user = getUserById(userId);
+                    
+                    if (user.isFollowing) {
+                        user.isFollowing = false;
+                        user.followers--;
+                        followProfileBtn.textContent = 'Follow';
+                        followProfileBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-gray-200', 'border', 'border-gray-300', 'dark:border-gray-600');
+                        followProfileBtn.classList.add('bg-primary', 'text-white');
+                    } else {
+                        user.isFollowing = true;
+                        user.followers++;
+                        followProfileBtn.textContent = 'Following';
+                        followProfileBtn.classList.remove('bg-primary', 'text-white');
+                        followProfileBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-gray-200', 'border', 'border-gray-300', 'dark:border-gray-600');
+                    }
+                });
+            }
+        }
+
+        // Attach event listeners to post elements
+        function attachPostEventListeners() {
+            // Like buttons
+            const likeButtons = document.querySelectorAll('.like-btn');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const postId = parseInt(button.getAttribute('data-post-id'));
+                    const post = mockPosts.find(p => p.id === postId);
+                    const likeCount = button.querySelector('.like-count');
+                    
+                    if (post.isLiked) {
+                        post.isLiked = false;
+                        post.likes--;
+                        button.classList.remove('text-red-500', 'dark:text-red-500', 'hover:text-red-600', 'dark:hover:text-red-600');
+                        button.querySelector('i').classList.remove('fas');
+                        button.querySelector('i').classList.add('far');
+                    } else {
+                        post.isLiked = true;
+                        post.likes++;
+                        button.classList.add('text-red-500', 'dark:text-red-500', 'hover:text-red-600', 'dark:hover:text-red-600');
+                        button.querySelector('i').classList.remove('far');
+                        button.querySelector('i').classList.add('fas', 'heart-beat');
+                    }
+                    
+                    likeCount.textContent = post.likes;
+                    
+                    // Remove animation class and re-add it to restart animation
+                    button.querySelector('i').classList.remove('heart-beat');
+                    setTimeout(() => {
+                        if (post.isLiked) {
+                            button.querySelector('i').classList.add('heart-beat');
+                        }
+                    }, 10);
+                });
+            });
+            
+            // Follow buttons
+            const followButtons = document.querySelectorAll('.follow-btn');
+            followButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const userId = parseInt(button.getAttribute('data-user-id'));
+                    const user = getUserById(userId);
+                    
+                    if (user.isFollowing) {
+                        user.isFollowing = false;
+                        user.followers--;
+                        button.textContent = 'Follow';
+                        button.classList.remove('text-gray-500', 'dark:text-gray-400');
+                        button.classList.add('text-primary');
+                    } else {
+                        user.isFollowing = true;
+                        user.followers++;
+                        button.textContent = 'Following';
+                        button.classList.remove('text-primary');
+                        button.classList.add('text-gray-500', 'dark:text-gray-400');
+                    }
+                });
+            });
+            
+            // Comment input
+            const commentInputs = document.querySelectorAll('.comment-input');
+            commentInputs.forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && input.value.trim() !== '') {
+                        const postId = parseInt(input.getAttribute('data-post-id'));
+                        const post = mockPosts.find(p => p.id === postId);
+                        
+                        const newComment = {
+                            id: Date.now(),
+                            userId: currentUserId,
+                            content: input.value.trim(),
+                            timestamp: "Just now"
+                        };
+                        
+                        post.comments.push(newComment);
+                        input.value = '';
+                        
+                        // Re-render the feed or profile to show the new comment
+                        if (mainContent.querySelector('#feed-container')) {
+                            renderFeed();
+                        } else if (mainContent.querySelector('#profile-container')) {
+                            const profileUserId = parseInt(mainContent.querySelector('.follow-profile-btn')?.getAttribute('data-user-id')) || currentUserId;
+                            renderProfile(profileUserId);
+                        }
+                    }
+                });
+            });
+            
+            // Profile links in posts
+            const postProfiles = document.querySelectorAll('.post-header img, .post-header h4');
+            postProfiles.forEach(element => {
+                element.addEventListener('click', () => {
+                    const postElement = element.closest('.post');
+                    const postId = parseInt(postElement.getAttribute('data-post-id'));
+                    const post = mockPosts.find(p => p.id === postId);
+                    renderProfile(post.userId);
+                });
+            });
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderFeed();
+            
+            // Set current user's avatar
+            const currentUser = getUserById(currentUserId);
+            const navUserAvatar = document.getElementById('nav-user-avatar');
+            const sidebarUserAvatar = document.getElementById('sidebar-user-avatar');
+            const sidebarUserName = document.getElementById('sidebar-user-name');
+            const sidebarUserHandle = document.getElementById('sidebar-user-handle');
+            const postModalAvatar = document.getElementById('post-modal-avatar');
+            
+            navUserAvatar.src = currentUser.avatar;
+            sidebarUserAvatar.src = currentUser.avatar;
+            sidebarUserName.textContent = currentUser.name;
+            sidebarUserHandle.textContent = `@${currentUser.handle}`;
+            postModalAvatar.src = currentUser.avatar;
+            
+            // Navigation event listeners
+            homeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderFeed();
+            });
+            
+            navHome.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderFeed();
+            });
+            
+            profileLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderProfile(currentUserId);
+                userMenuDropdown.classList.add('hidden');
+            });
+            
+            // Sidebar user profile link
+            const sidebarUserProfile = document.getElementById('sidebar-user-profile');
+            sidebarUserProfile.addEventListener('click', () => {
+                renderProfile(currentUserId);
+            });
+        });
+    </script>
+</body>
+</html>
